@@ -223,14 +223,18 @@
 		   // end the animation after drawing all objects for all dates
 		   dateIdx = 0;
 		   theta = 0;
+                   runAnimation.value = false;
 	        }
              }
 	  }
 
+	  if(runAnimation.value) {
           // request new frame
           requestAnimFrame(function() {
             animate(neo, runAnimation, canvas, context);
-          });
+	    });
+
+	  }
         }
       }
 
@@ -243,7 +247,7 @@
       var dateIdx = 0;
       var dateMax = -1;
       var dTheta = 0;
-      var dDate = 10;
+      var dDate = 30; // plot every 30 days - need to check 2nd derivative per object instead
       var xyPos = [];
       var distMax = 12;
       var scaleDist = 290 / distMax;
@@ -267,9 +271,6 @@
         runAnimation.value = !runAnimation.value;
 
         if(runAnimation.value) {
-          animate(neo, runAnimation, canvas, context);
-        }
-        else {
           // clear the canvas
 	  context.clearRect(0, 0, canvas.width, canvas.height);
           context.drawImage(bgImage, (canvas.width-bgImage.width)/2, (canvas.height-bgImage.height)/2);
@@ -279,6 +280,7 @@
 	  neoIdx = 0;
 	  dateIdx = 0;
 	  theta = 0;
+          animate(neo, runAnimation, canvas, context);
         }
       });
 
