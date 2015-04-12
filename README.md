@@ -10,6 +10,8 @@ such as [Celestia](www.shatters.net/celestia/) we wanted to try to
 visualize both the immediate threat from all Risk Page asteroids
 and to show a snapshot of the 100-year risk outlook.
 
+![PS1 NEOs](ps1neos.png "PS1 NEOs in Celestia")
+
 ## Team Members
 
 * Melody Wolk, Institute for Astronomy, University of Hawaii
