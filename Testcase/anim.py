@@ -10,8 +10,9 @@ import os
 import matplotlib.cm as cm
 
 autokm = 149597871 # Convert au to kms
-img = imread('images.jpeg') # Background image
-
+img = imread('space.jpg') # Background image
+earth = imread('Earth.png')
+moon = imread('moon.png')
 # Create the plot layout
 fig = plt.figure()
 ax = fig.add_subplot(111)
@@ -28,15 +29,15 @@ plt.text(-9.7,7.9,'2065',fontsize=10,color='w')
 plt.text(-8.5,7,'2090',fontsize=10,color='w')
 # Display the background
 plt.imshow(img, zorder=0, extent=[xmin,xmax,ymin,ymax])
-
 # Plot the Earth at the center
-circle = plt.Circle((0,0), radius = 0.10, fc='w')
-plt.gca().add_patch(circle)
-# Plot the Moon radius
+plt.imshow(earth, zorder=0, extent=[-0.5,0.5,-0.5,0.5])
+# Plot the Moon radius and image
 ang = np.arange(0,2*np.pi, 0.01)
 dTL = np.log10(384400)
-rclock = 0.5
 plt.plot(dTL*np.cos(ang), dTL*np.sin(ang), 'w--')
+plt.imshow(moon, zorder=0, extent=[dTL*np.sqrt(2)/2-0.32,dTL*np.sqrt(2)/2+0.32,dTL*np.sqrt(2)/2-0.25,dTL*np.sqrt(2)/2+0.25])
+rclock = 0.5
+
 
 # Find the number of files
 nbfile=0
