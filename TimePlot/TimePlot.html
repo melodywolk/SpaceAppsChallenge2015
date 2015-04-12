@@ -1,0 +1,287 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+    </style>
+  </head>
+  <body>
+<input type="file" id="files" name="files[]" multiple />
+
+<script>
+      /*
+       * define the runAnimation boolean as an obect
+       * so that it can be modified by reference
+       */
+      var runAnimation = {
+	      value: false,
+	      loading: false,
+	      progress: '.'
+      };
+      var wasLoading = false;
+
+  // read in data from file
+  var fileJSON;
+  var reader = new FileReader();
+  runAnimation.loading = true;
+  reader.onload = function(event) {
+	  var contents = event.target.result;
+          // convert text to JSON object
+	  neo = JSON.parse(contents);
+	  neoMax = neo.length - 1;
+	  initXYPos();
+	  initDistance();
+	  dateMax = neo[0].distances.length - 1;
+          dTheta = 2*Math.PI / (dateMax/dDate);
+	  runAnimation.loading = false;
+          console.log("File contents: " + contents);
+      };
+
+      reader.onerror = function(event) {
+         console.error("File could not be read! Code " + event.target.error.code);
+         runAnimation.loading = false;
+	 };
+
+  function initDistance() {
+	  distMax = 12;
+	  scaleDist = 290 / distMax;
+  }	  
+
+  function handleFileSelect(evt) {
+    var files = evt.target.files; // FileList object
+
+    // files is a FileList of File objects. List some properties.
+    if(files.length) {
+      fileJSON = files[0];
+      reader.readAsText(fileJSON);
+      }
+  }
+
+  document.getElementById('files').addEventListener('change', handleFileSelect, false);
+</script>
+    <h3>
+	    <a href="https://github.com/melodywolk/SpaceAppsChallenge2015">IfA SpaceAppsChallenge2015</a>
+    </h3>
+    <canvas id="myCanvas" width="600" height="600"></canvas>
+    <script>
+      window.requestAnimFrame = (function(callback) {
+        return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
+        function(callback) {
+          window.setTimeout(callback, 1000 / 60);
+        };
+      })();
+
+      function initXYPos() {
+	 for(var n=0; n <= neoMax; n++) {
+   	    xyPos[n] = {x:0,y:0};
+	 }
+      }
+      function findDistance(obj) {
+	  var dist = 0;
+	  if(dateIdx <= dateMax) {
+	     dist = obj.distances[dateIdx];
+	  }
+	  return dist;
+      }
+
+      /* NEO data JSON structure
+      name
+      H
+      uncertainty
+      mjds[]
+      distances[]
+      jplurl
+      impactprobability
+      vinifinity
+      jplH
+      jplDiameter
+      palermoScaleCum
+      palermoScaleMax
+
+      */
+
+      function drawMoon(context) {
+	 context.save();
+         var x = canvas.width / 2;
+         var y = canvas.height / 2;
+         var radius = 5.58478337899650 * scaleDist;
+         var startAngle = 0 * Math.PI;
+         var endAngle = 2 * Math.PI;
+         var counterClockwise = false;
+
+         context.beginPath();
+         context.setLineDash([3]);
+         context.arc(x, y, radius, startAngle, endAngle, counterClockwise);
+         context.lineWidth = 2;
+         // line color
+         context.strokeStyle = 'white';
+         context.stroke();
+	 context.restore();
+      }
+
+      function drawGEO(context) {
+	 context.save();
+         var x = canvas.width / 2;
+         var y = canvas.height / 2;
+         var radius = 4.55371315759617 * scaleDist;
+         var startAngle = 0 * Math.PI;
+         var endAngle = 2 * Math.PI;
+         var counterClockwise = false;
+
+         context.beginPath();
+         context.setLineDash([6,3]);
+         context.arc(x, y, radius, startAngle, endAngle, counterClockwise);
+         context.lineWidth = 2;
+         // line color
+         context.strokeStyle = '#c7c7c7';
+         context.stroke();
+	 context.restore();
+      }
+
+      function colorScale(value) {
+	 var a = 0.7; 
+	 value *= -255*255*5;
+	 var r = value;
+	 r >>= 4;
+	 r %= 256;
+         var g = value;
+	 g >>= 2;
+	 g %= 256;
+         var b = value;
+	 b %= 24;
+	 b = 0;
+         return "rgba("+r+","+g+","+b+","+a+")";
+      }
+
+      function drawObject(obj, context) {
+
+      // compute x,y as function of time and dist from center
+	  var dist = findDistance(neo[neoIdx]);
+	  var x = dist * scaleDist;
+	  x = x * Math.cos(theta);
+	  x = x + canvas.width/2;
+	  var y = dist * scaleDist;
+	  y = y * Math.sin(theta);
+	  y = y + canvas.height/2;
+	  if(x >= 0 && x < canvas.width && y >= 0 && y < canvas.height) {
+	     if(dateIdx == 0) {
+	        xyPos[neoIdx].x = x;
+	        xyPos[neoIdx].y = y;
+	     }
+	     context.beginPath();
+// draw line from here
+             context.moveTo(x,y);
+// draw line to here
+             context.lineTo(xyPos[neoIdx].x, xyPos[neoIdx].y);
+// set line width based on H
+             context.lineWidth = 2; //obj.H * scaleH;
+// set line color based on danger
+// need function returning color as function of Palermo scale value
+             context.strokeStyle = colorScale(obj.palermoScaleMax);
+	     context.stroke();
+             xyPos[neoIdx].x = x;
+             xyPos[neoIdx].y = y;
+	  }
+      }
+
+      function animate(neo, runAnimation, canvas, context) {
+        if(runAnimation.value) {
+	  // this code breaks if there are NO OBJECTS!!!!
+	  // draw the object
+	  if(runAnimation.loading) {
+             context.font = 'italic 40pt Calibri';
+	     var str = 'Loading ';
+	     var prog = runAnimation.progress;
+	     context.fillText(str.concat(prog), 0, canvas.height-20);
+	     // slow to one dot / sec
+	     if(++calls % 100 == 0) { 
+	        runAnimation.progress = prog.concat('.');
+             }
+	     wasLoading = true;
+	  }
+	  else
+	  {
+             if(wasLoading)  {
+	        wasLoading = false;
+
+	        context.clearRect(0, 0, canvas.width, canvas.height);
+		context.drawImage(bgImage, (canvas.width-bgImage.width)/2, (canvas.height-bgImage.height)/2);
+		drawMoon(context);
+		drawGEO(context);
+	     }
+	     drawObject(neo[neoIdx], context);
+	     // select the "next" object and date
+	     neoIdx = neoIdx + 1;
+	     if(neoIdx > neoMax) {
+	        neoIdx = 0;
+	        dateIdx = dateIdx + dDate;
+	        theta += dTheta;
+	        if(dateIdx > dateMax) {
+		   // end the animation after drawing all objects for all dates
+		   dateIdx = 0;
+		   theta = 0;
+	        }
+             }
+	  }
+
+          // request new frame
+          requestAnimFrame(function() {
+            animate(neo, runAnimation, canvas, context);
+          });
+        }
+      }
+
+      var canvas = document.getElementById('myCanvas');
+      var context = canvas.getContext('2d');
+      var theta = 0;
+      var neo = [];
+      var neoIdx = 0; 
+      var neoMax = -1;
+      var dateIdx = 0;
+      var dateMax = -1;
+      var dTheta = 0;
+      var dDate = 10;
+      var xyPos = [];
+      var distMax = 12;
+      var scaleDist = 290 / distMax;
+      var scaleH = 0.2;
+      var scalePalermo = -300000;
+      var calls = 0;
+
+      var bgImage = new Image();
+
+      bgImage.onload = function() {
+        context.drawImage(bgImage, (canvas.width-bgImage.width)/2, (canvas.height-bgImage.height)/2);
+	drawMoon(context);
+	drawGEO(context);
+      };
+      bgImage.src = 'http://apod.nasa.gov/apod/image/1210/m8m20_panstarrs900.jpg';
+
+      
+      // add click listener to canvas
+      document.getElementById('myCanvas').addEventListener('click', function() {
+        // flip flag
+        runAnimation.value = !runAnimation.value;
+
+        if(runAnimation.value) {
+          animate(neo, runAnimation, canvas, context);
+        }
+        else {
+          // clear the canvas
+	  context.clearRect(0, 0, canvas.width, canvas.height);
+          context.drawImage(bgImage, (canvas.width-bgImage.width)/2, (canvas.height-bgImage.height)/2);
+	  drawMoon(context);
+	  drawGEO(context);
+	  // reset the animation
+	  neoIdx = 0;
+	  dateIdx = 0;
+	  theta = 0;
+        }
+      });
+
+    </script>
+  </body>
+</html>      
