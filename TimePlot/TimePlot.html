@@ -9,8 +9,6 @@
       </style>
    </head>
    <body>
-		<input type="file" id="files" name="files[]" multiple />
-
 		<script>
 		   /*
 		    * define the runAnimation boolean as an obect
@@ -22,15 +20,41 @@
 				progress: '.'
 			};
 			var wasLoading = false;
-		
+
+			// return a parameter value from the current URL
+			function getParam ( sname ) {
+			  var params = location.search.substr(location.search.indexOf("?")+1);
+			  var sval = "";
+			  params = params.split("&");
+				 // split param and value into individual pieces
+				 for (var i=0; i<params.length; i++)
+					 {
+						temp = params[i].split("=");
+						if ( [temp[0]] == sname ) { sval = temp[1]; }
+					 }
+			  return sval;
+			}
+
+		   // Auto load JSON file from URL query parameter obj=xxxx
+		   var xmlhttp = new XMLHttpRequest();
+			var param = getParam("obj");
+			var url = param.concat('.json');
+
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+					neo = JSON.parse(xmlhttp.responseText);
+					console.log("File contents: " + xmlhttp.responseText);
+					initJSON();
+				}
+			}
+			xmlhttp.open("GET", url, true);
+			xmlhttp.send();
+
 		   // read in data from file
 		   var fileJSON;
 		   runAnimation.loading = true;
 		   var reader = new FileReader();
-			reader.onload = function(event) {
-				var contents = event.target.result;
-				// convert text to JSON object
-				neo = JSON.parse(contents);
+			function initJSON() {
 				neoMax = neo.length - 1;
 				initXYPos();
 				initDistance();
@@ -41,35 +65,19 @@
 				dateN = dateMax - dateMin + 1;
 				dTheta = 2*Math.PI / (dateN/dDate);
 				runAnimation.loading = false;
-				console.log("File contents: " + contents);
-			};
-		
-		   reader.onerror = function(event) {
-				console.error("File could not be read! Code " + event.target.error.code);
-				runAnimation.loading = false;
 			};
 		
 			function initDistance() {
 				distMax = 12;
 				scaleDist = 290 / distMax;
 			}	  
-		
-		   function handleFileSelect(evt) {
-		      var files = evt.target.files; // FileList object
-		
-		      // files is a FileList of File objects. List some properties.
-		      if(files.length) {
-				   fileJSON = files[0];
-				   reader.readAsText(fileJSON);
-		      }
-		   }
-		
-		   document.getElementById('files').addEventListener('change', handleFileSelect, false);
 		</script>
+
 		<h3>
 		   <a href="https://github.com/melodywolk/SpaceAppsChallenge2015">IfA SpaceAppsChallenge2015</a>
 		</h3>
 		<canvas id="myCanvas" width="600" height="600"></canvas>
+
 		<script>
 			window.requestAnimFrame = (function(callback) {
 				return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
@@ -105,7 +113,7 @@
 				diam_km
 				data [2] (mjds,dist_AU)
 		      */
-		
+
 			function drawMoon(context) {
 				context.save();
 				var x = canvas.width / 2;
@@ -123,6 +131,28 @@
 				context.strokeStyle = 'white';
 				context.stroke();
 				context.restore();
+
+				context.font = 'italic 20pt Calibri';
+				context.fillStyle = 'white';
+				var labelX = x + radius + 100
+				var labelY = y + 10;
+				context.fillText('2015', labelX, labelY);
+				labelX = x - radius - 100 - 50;
+				labelY = y + 10;
+				context.fillText('2065', labelX, labelY);
+				labelX = x - 25;
+				labelY = y + radius + 110;
+				context.fillText('2040', labelX, labelY);
+				labelX = x - 25;
+				labelY = y - radius - 90;
+				context.fillText('2090', labelX, labelY);
+
+				// now show the Moon
+				var moonImage = new Image();
+				moonImage.onload = function() {
+					context.drawImage(moonImage, x + radius - moonImage.width/2, (canvas.height-moonImage.height)/2);
+				};
+				moonImage.src = 'moon.jpg';
 			}
 		
 			function drawGEO(context) {
@@ -191,10 +221,38 @@
 					xyPos[neoIdx].dataIdx++;
 				}
 				if(dist >= 0) {
-					var x = dist * scaleDist;
+					context.beginPath();
+					context.rect(100, canvas.height-40, 80, 20);
+					context.fillStyle = 'black';
+					context.fill();
+					context.lineWidth = 2;
+					context.strokeStyle = 'black';
+					context.stroke();
+
+					context.font = 'italic 20pt Calibri';
+					context.fillStyle = 'red';
+					// convert mjds to date string
+					var mjds = dateIdx + dateMin;
+					var str = mjds.toString();
+					context.fillText(str, 100, canvas.height-20);
+
+					/*
+					// draw the arrow of time
+					var x = canvas.width/2;
+					var y = canvas.height/2;
+					var radius = 220;
+					context.beginPath();
+					context.arc(x, y, radius, lastTheta, theta);
+					context.lineWidth = 1;
+					context.strokeStyle = 'white';
+					context.stroke();
+					lastTheta = theta;
+					*/
+
+					x = dist * scaleDist;
 					x = x * Math.cos(theta);
 					x = x + canvas.width/2;
-					var y = dist * scaleDist;
+					y = dist * scaleDist;
 					y = y * Math.sin(theta);
 					y = y + canvas.height/2;
 					if(x >= 0 && x < canvas.width && y >= 0 && y < canvas.height) {
@@ -277,6 +335,7 @@
 			var dateMin = -1;
 			var dateMax = -1;
 			var dTheta = 0;
+			var lastTheta = 0;
 			var dDate = 1; // plot every 30 days - need to check 2nd derivative per object instead
 			var xyPos = [];
 			var distMax = 12;
@@ -292,7 +351,8 @@
 				drawMoon(context);
 				drawGEO(context);
 			};
-		   bgImage.src = 'http://apod.nasa.gov/apod/image/1210/m8m20_panstarrs900.jpg';
+		   //bgImage.src = 'http://apod.nasa.gov/apod/image/1210/m8m20_panstarrs900.jpg';
+		   bgImage.src = 'earth.png';
 		
 		      
 		   // add click listener to canvas
