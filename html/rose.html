@@ -20,9 +20,8 @@
 			var runAnimation = {
 				value: false,
 				loading: false,
-				progress: '.'
+				mode: 'idle'
 			};
-			var wasLoading = false;
 
 			// return a parameter value from the current URL
 			function getParam ( sname ) {
@@ -38,25 +37,6 @@
 			  return sval;
 			}
 
-		   // Auto load JSON file from URL query parameter obj=xxxx
-		   var xmlhttp = new XMLHttpRequest();
-			var param = getParam("obj");
-			var url = param.concat('.json');
-
-			xmlhttp.onreadystatechange = function() {
-				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-					neo = JSON.parse(xmlhttp.responseText);
-					console.log("File contents: " + xmlhttp.responseText);
-					initJSON();
-				}
-			}
-			xmlhttp.open("GET", url, true);
-			xmlhttp.send();
-
-		   // read in data from file
-		   var fileJSON;
-		   runAnimation.loading = true;
-		   var reader = new FileReader();
 			function initJSON() {
 				neoMax = neo.length - 1;
 				initXYPos();
@@ -67,7 +47,6 @@
 				dateMax = neo[0].data[dateMaxIdx][0];
 				dateN = dateMax - dateMin + 1;
 				dTheta = 2*Math.PI / (dateN/dDate);
-				runAnimation.loading = false;
 			};
 
 			function drawNEOData(neo) {
@@ -131,6 +110,7 @@
 						drawNEOData(neo[i]);
 					}
 				}
+				console.log('drawTimePlot');
 			}
 
 			function initDistance() {
@@ -197,21 +177,6 @@ geosynchronous satellite altitude, respectively.
 				}
 			}
 		
-		      /* NEO data JSON structure - serge
-		      name
-		      H
-		      uncertainty
-		      mjds[]
-		      distances[]
-		      jplurl
-		      impactprobability
-		      vinifinity
-		      jplH
-		      jplDiameter
-		      palermoScaleCum
-		      palermoScaleMax
-		
-		      */
 		      /* NEO data JSON structure - larry
 		      name
 				palermo
@@ -251,14 +216,17 @@ geosynchronous satellite altitude, respectively.
 				labelX = x - 25;
 				labelY = y - radius - 90;
 				context.fillText('2090', labelX, labelY);
+				console.log('drawMoon');
 
+				/*
 				// now show the Moon
 				var moonImage = new Image();
 				moonImage.onload = function() {
 					context.drawImage(moonImage, x + radius - moonImage.width/2, (canvas.height-moonImage.height)/2);
-					drawTimePlot();
+					//drawTimePlot();
 				};
 				moonImage.src = 'moon.jpg';
+				*/
 			}
 		
 			function drawGEO(context) {
@@ -279,13 +247,16 @@ geosynchronous satellite altitude, respectively.
 				context.stroke();
 				context.restore();
 
+				console.log('drawGEO');
+				/*
 				// now show the sat
 				var satImage = new Image();
 				satImage.onload = function() {
 					context.drawImage(satImage, x - radius - satImage.width/2, (canvas.height-satImage.height)/2);
-					drawMoon(context);
+					//drawMoon(context);
 				};
 				satImage.src = 'satellite.jpg';
+				*/
 			}
 		
 			function colorScale(value) {
@@ -326,125 +297,52 @@ geosynchronous satellite altitude, respectively.
 				return Math.log10(au);
 			}
 
-			function drawObject(obj, context) {
-				// compute x,y as function of time and dist from center
+			// load the background image
+			var bgImage = new Image();
+			bgImage.onload = function() {
+				console.log('bgImage');
+				runAnimation.mode = 'orbits';
+			};
+		   bgImage.src = 'earth.png';
 
-				// if the current dateIdx is equal to the current object's current data element's date
-				// then plot the position and increment the dataIdx of the object
-				var dist = -1;
-				var dataIdx = xyPos[neoIdx].dataIdx;
-				if(neo[neoIdx].data[dataIdx][0] == dateMin+dateIdx) {
-					dist = AUToLogKM(neo[neoIdx].data[dataIdx][1]);
-					xyPos[neoIdx].dataIdx++;
-				}
-				if(dist >= 0) {
-					context.beginPath();
-					context.rect(100, canvas.height-40, 80, 20);
-					context.fillStyle = 'black';
-					context.fill();
-					context.lineWidth = 2;
-					context.strokeStyle = 'black';
-					context.stroke();
-
-					context.font = 'italic 20pt Calibri';
-					context.fillStyle = 'red';
-					// convert mjds to date string
-					var mjds = dateIdx + dateMin;
-					var str = mjds.toString();
-					context.fillText(str, 100, canvas.height-20);
-
-					var x = canvas.width/2;
-					var y = canvas.height/2;
-					/*
-					// draw the arrow of time
-					var radius = 220;
-					context.beginPath();
-					context.arc(x, y, radius, lastTheta, theta);
-					context.lineWidth = 1;
-					context.strokeStyle = 'white';
-					context.stroke();
-					lastTheta = theta;
-					*/
-
-					x = dist * scaleDist;
-					x = x * Math.cos(theta);
-					x = x + canvas.width/2;
-					y = dist * scaleDist;
-					y = y * Math.sin(theta);
-					y = y + canvas.height/2;
-					if(x >= 0 && x < canvas.width && y >= 0 && y < canvas.height) {
-						if(dateIdx == 0) {
-							xyPos[neoIdx].x = x;
-							xyPos[neoIdx].y = y;
-						}
-						context.beginPath();
-						context.moveTo(x,y);
-						context.lineTo(xyPos[neoIdx].x, xyPos[neoIdx].y);
-						context.lineWidth = 2; //obj.H * scaleH;
-						// set line color based on danger
-						context.strokeStyle = colorScale(obj.palermo);
-						context.stroke();
-						xyPos[neoIdx].x = x;
-						xyPos[neoIdx].y = y;
-					}
-				}
-			}
-		
 			function animate(neo, runAnimation, canvas, context) {
+				console.log(runAnimation.value+':'+runAnimation.mode+':'+runAnimation.loading);
 				if(runAnimation.value) {
-					// this code breaks if there are NO OBJECTS!!!!
-					// draw the object
-					if(runAnimation.loading) {
-						context.font = 'italic 40pt Calibri';
-						var str = 'Loading ';
-						var prog = runAnimation.progress;
-						context.fillText(str.concat(prog), 0, canvas.height-20);
-						// slow to one dot / sec
-						if(++calls % 100 == 0) { 
-							runAnimation.progress = prog.concat('.');
-						}
-						wasLoading = true;
-					}
-					else
-					{
-						if(wasLoading)  {
-							wasLoading = false;
-
-							/*
-							context.clearRect(0, 0, canvas.width, canvas.height);
+					if(!runAnimation.loading) {
+						if(runAnimation.mode = 'bg') {
+							// draw the Earth background
 							context.drawImage(bgImage, (canvas.width-bgImage.width)/2, (canvas.height-bgImage.height)/2);
-							drawMoon(context);
-							drawGEO(context);
-							*/
+							runAnimation.mode = 'wait';
 						}
-						drawObject(neo[neoIdx], context);
-						// select the "next" object and date
-						neoIdx = neoIdx + 1;
-						if(neoIdx > neoMax) {
-							neoIdx = 0;
-							dateIdx = dateIdx + dDate;
-							theta += dTheta;
-							if(dateIdx > dateN) {
-								// end the animation after drawing all objects for all dates
-								dateIdx = 0;
-								theta = 0;
-								runAnimation.value = false;
-							}
+						if(runAnimation.mode = 'orbits') {
+							// draw the GEO and Moon orbits
+							drawOrbits();
+							runAnimation.mode = 'neo';
 						}
-					}
-		
-					if(runAnimation.value) {
-						// request new frame
-						requestAnimFrame(function() {
-						animate(neo, runAnimation, canvas, context);
-						});
-		
+						if(runAnimation.mode = 'neo') {
+							// draw the asteroid(s)
+							drawTimePlot(context);
+							runAnimation.mode = 'done';
+							runAnimation.value = false;
+						}
+						if(runAnimation.value) {
+							// request new frame
+							requestAnimFrame(function() {
+								animate(neo, runAnimation, canvas, context);
+							});
+						}
 					}
 				}
 			}
-		
+
 			var canvas = document.getElementById('myCanvas');
 			var context = canvas.getContext('2d');
+
+			function drawOrbits() {
+				drawGEO(context);
+				drawMoon(context);
+			}
+
 			var theta = 0;
 			var neo = [];
 			var neoIdx = 0; 
@@ -455,7 +353,7 @@ geosynchronous satellite altitude, respectively.
 			var dateMax = -1;
 			var dTheta = 0;
 			var lastTheta = 0;
-			var dDate = 1; // plot every 30 days - need to check 2nd derivative per object instead
+			var dDate = 1;
 			var xyPos = [];
 			var distMax = 12;
 			var scaleDist = 290 / distMax;
@@ -463,36 +361,29 @@ geosynchronous satellite altitude, respectively.
 			var scalePalermo = -300000;
 			var calls = 0;
 		
-			var bgImage = new Image();
-		
-			bgImage.onload = function() {
-				context.drawImage(bgImage, (canvas.width-bgImage.width)/2, (canvas.height-bgImage.height)/2);
-				drawGEO(context);
-			};
-		   //bgImage.src = 'http://apod.nasa.gov/apod/image/1210/m8m20_panstarrs900.jpg';
-		   bgImage.src = 'earth.png';
-		
-		      
-			/*
-		   // add click listener to canvas
-			document.getElementById('myCanvas').addEventListener('click', function() {
-				// flip flag
-				runAnimation.value = !runAnimation.value;
-		
-				if(runAnimation.value) {
-					// clear the canvas
-					context.clearRect(0, 0, canvas.width, canvas.height);
-					context.drawImage(bgImage, (canvas.width-bgImage.width)/2, (canvas.height-bgImage.height)/2);
-					drawGEO(context);
-					drawMoon(context);
-					// reset the animation
-					neoIdx = 0;
-					dateIdx = 0;
-					theta = 0;
+		   // Auto load JSON file from URL query parameter obj=xxxx
+		   var xmlhttp = new XMLHttpRequest();
+			var param = getParam("obj");
+			var url = param.concat('.json');
+
+			xmlhttp.onreadystatechange = function() {
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+					neo = JSON.parse(xmlhttp.responseText);
+					console.log(url);
+					initJSON();
+					runAnimation.value = true;
+					runAnimation.loading = false;
+					runAnimation.mode = 'orbits';
 					animate(neo, runAnimation, canvas, context);
 				}
-			});
-			*/
+			}
+			xmlhttp.open("GET", url, true);
+			xmlhttp.send();
+			runAnimation.value = true;
+			runAnimation.mode = 'bg';
+			runAnimation.loading = true;
+			animate(neo, runAnimation, canvas, context);
+
 		</script>
    </body>
 </html>      
