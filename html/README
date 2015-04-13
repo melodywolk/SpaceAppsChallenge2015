@@ -1,0 +1,13 @@
+Content:
+--------
+
+index.html           - creates this pages and loads asteroid impact data
+globe.js             - renders asteroid impacts
+
+data/
+   riskData_0410.txt - asteroid impact data, from NASA, raw
+   5-1000.json       - fitltered and sorted impact data, ready for Globe
+   scan.go           - converter: riskData_0410.txt -> 5-1000.json format
+
+third-party/
+   the globe library
