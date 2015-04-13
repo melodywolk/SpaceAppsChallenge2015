@@ -50,7 +50,7 @@ Challenge room at the Open House.
 
 ## The Data
 
-The data are the PHAs from [JPL Risk Page](http://neo.jpl.nasa.gov/risks/) and the [IAU Minor Planet Center](http://www.minorplanetcenter.net/).  These objects come closer than 0.05 astronomical units (AU) from Earth and about 140 meters or larger in diameter. We have extracted: the date, the probability of impact, the distance to the Earth and the Palermo scale that encodes the dangerosity of the asteroid and is related to the energy of the potential impact.
+The data are the PHAs from [JPL Risk Page](http://neo.jpl.nasa.gov/risks/) and the [IAU Minor Planet Center](http://www.minorplanetcenter.net/).  These objects come closer than 0.05 astronomical units (AU) from Earth and are about 140 meters or larger in diameter. We have extracted: the date, the probability of impact, the distance to the Earth and the Palermo scale that encodes the dangerosity of the asteroid and is related to the energy of the potential impact.
 
 * Impact Globe
 
