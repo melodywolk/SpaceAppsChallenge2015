@@ -9,7 +9,10 @@ H&#333;k&#363;lele means "shooting star" in Hawaiian.  Our goal is
 to produce a visualization of the asteroid impact hazard, emphasizing
 the long-term threat over the next 100 years.
 
+
 ## Description
+
+Like the Hula, a traditional Hawaiian dance narrating the interaction between the native Hawaiians and the Sea, our project aims at providing new ways to tell the story between asteroids (H&#333;k&#363;lele) and the Earth.
 
 JPL maintains a current list of the most hazardous near-Earth
 asteroids NEAs at its [Risk Page]:(http://neo.jpl.nasa.gov/risks/).
@@ -40,7 +43,14 @@ altitude. Asteroids whose rose plot extends inside these dashed
 circles have approaches closer than the moon and geosynchronous
 satellite altitude, respectively.
 
+The 2015 SpaceApps Challenge coincided with the University of
+Hawaii's 2015 Open House, so we were able to solicit the input
+of dozens of attendees who stopped by the 2015 SpaceApps 
+Challenge room at the Open House.
+
 ## The Data
+
+The data are the PHAs from [JPL Risk Page](http://neo.jpl.nasa.gov/risks/) and the [IAU Minor Planet Center](http://www.minorplanetcenter.net/).  These objects come closer than 0.05 astronomical units (AU) from Earth and about 140 meters or larger in diameter. We have extracted: the date, the probability of impact, the distance to the Earth and the Palermo scale that encodes the dangerosity of the asteroid and is related to the energy of the potential impact.
 
 * Impact Globe
 
