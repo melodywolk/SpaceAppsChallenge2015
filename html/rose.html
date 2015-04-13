@@ -300,40 +300,25 @@ RELOAD your page if you do not see the plot!
 				return Math.log10(au);
 			}
 
-			// load the background image
-			var bgImage = new Image();
-			bgImage.onload = function() {
-				console.log('bgImage');
-				runAnimation.mode = 'orbits';
-			};
-		   bgImage.src = 'earth.png';
-
 			function animate(neo, runAnimation, canvas, context) {
 				console.log(runAnimation.value+':'+runAnimation.mode+':'+runAnimation.loading);
 				if(runAnimation.value) {
-					if(!runAnimation.loading) {
-						if(runAnimation.mode = 'bg') {
-							// draw the Earth background
-							context.drawImage(bgImage, (canvas.width-bgImage.width)/2, (canvas.height-bgImage.height)/2);
-							runAnimation.mode = 'wait';
-						}
-						if(runAnimation.mode = 'orbits') {
-							// draw the GEO and Moon orbits
-							drawOrbits();
-							runAnimation.mode = 'neo';
-						}
-						if(runAnimation.mode = 'neo') {
-							// draw the asteroid(s)
-							drawTimePlot(context);
-							runAnimation.mode = 'done';
-							runAnimation.value = false;
-						}
-						if(runAnimation.value) {
-							// request new frame
-							requestAnimFrame(function() {
-								animate(neo, runAnimation, canvas, context);
-							});
-						}
+					if(runAnimation.mode == 'orbits') {
+						// draw the GEO and Moon orbits
+						drawOrbits();
+						runAnimation.mode = 'wait';
+					}
+					if(runAnimation.mode == 'neo') {
+						// draw the asteroid(s)
+						drawTimePlot(context);
+						runAnimation.mode = 'done';
+						runAnimation.value = false;
+					}
+					if(runAnimation.value) {
+						// request new frame
+						requestAnimFrame(function() {
+							animate(neo, runAnimation, canvas, context);
+						});
 					}
 				}
 			}
@@ -376,16 +361,27 @@ RELOAD your page if you do not see the plot!
 					initJSON();
 					runAnimation.value = true;
 					runAnimation.loading = false;
-					runAnimation.mode = 'orbits';
+					runAnimation.mode = 'neo';
 					animate(neo, runAnimation, canvas, context);
 				}
 			}
-			xmlhttp.open("GET", url, true);
-			xmlhttp.send();
-			runAnimation.value = true;
-			runAnimation.mode = 'bg';
-			runAnimation.loading = true;
-			animate(neo, runAnimation, canvas, context);
+
+			// load the background image
+			var bgImage = new Image();
+			bgImage.onload = function() {
+				// draw the Earth background
+				context.drawImage(bgImage, (canvas.width-bgImage.width)/2, (canvas.height-bgImage.height)/2);
+				console.log('bgImage');
+
+				xmlhttp.open("GET", url, true);
+				xmlhttp.send();
+				runAnimation.value = true;
+				runAnimation.loading = true;
+				runAnimation.mode = 'orbits';
+				animate(neo, runAnimation, canvas, context);
+			};
+		   bgImage.src = 'earth.png';
+
 
 		</script>
    </body>
