@@ -11,7 +11,7 @@
    </head>
 <body style="color: #dddddd; background-color: black; font-family: Helvetica Neue,Helvetica,Arial,sans-serif; font-size: 14pt; font-style: normal; font-variant: normal; ">
 
-<div style="font-size: 24pt">Hokulele Hula</div>
+<div style="font-size: 24pt">H&#333;k&#363;lele Hula</div>
 <div style="font-size: 14pt">Visualizing the Asteroid Skies</div>
 		<script>
 		   /*
@@ -128,26 +128,9 @@
 <a target="_blank" href="rose.html">Rose Plots</a> |
 <a target="_blank" href="gallery.html">Gallery</a> 
 </div>
-
 <p>
-<div style="font-size: 10pt">
-The Rose Plot shows the distance of a hazardous asteroid from Earth
-over the next 100 years, showing the periodic close approaches and
-potential impacts. For all the Risk Page objects, we obtained orbital
-elements from the IAU Minor Planet Center and computed positions
-for all the asteroids every day for 100 years into the future. The
-Rose Plot shows the distance from Earth for each asteroid over the
-next 100 years. The dashed lines show the Earth-Moon distance and
-Geosync satellite altitude. Asteroids whose rose plot extends inside
-these dashed circles have approaches closer than the moon and
-geosynchronous satellite altitude, respectively.
-</div>
-<p>
-RELOAD your page if you do not see the plot!
-<p>
-
 12 most hazardous asteroids
-<p>
+<br>
 <a href="rose.html?obj=410777">410777</a> | 
 <a href="rose.html?obj=101955">101955</a> | 
 <a href="rose.html?obj=29075">29075</a> | 
@@ -160,11 +143,22 @@ RELOAD your page if you do not see the plot!
 <a href="rose.html?obj=2007FT3">2007FT3</a> | 
 <a href="rose.html?obj=2000SG344">2000SG344</a> | 
 <a href="rose.html?obj=2010RF12">2010RF12</a> 
-<p>
-
-<table border=0 cellpadding=10 cellspacing=0><tr><td>
-		<canvas id="myCanvas" width="600" height="600"></canvas>
-</tr></td></table>
+<table border=0 cellpadding=10 cellspacing=0><col width="600"><col width="20"><col width="300"><tr>
+	<td><canvas id="myCanvas" width="600" height="600"></canvas></td>
+	<td valign="top"><div style="font-size: 10pt">
+	<td valign="top"><div style="font-size: 11pt">
+The Rose Plot shows the distance of a hazardous asteroid from Earth
+over the next 100 years, showing the periodic close approaches and
+potential impacts. For all the Risk Page objects, we obtained orbital
+elements from the IAU Minor Planet Center and computed positions
+for all the asteroids every day for 100 years into the future. The
+Rose Plot shows the distance from Earth for each asteroid over the
+next 100 years. The dashed lines show the Earth-Moon distance and
+Geosync satellite altitude. Asteroids whose rose plot extends inside
+these dashed circles have approaches closer than the moon and
+geosynchronous satellite altitude, respectively.
+</div> </td>
+</tr></table>
 
 		<script>
 			window.requestAnimFrame = (function(callback) {
