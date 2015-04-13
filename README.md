@@ -45,8 +45,8 @@ satellite altitude, respectively.
 * Impact Globe
 
  - Complete list of Risk Page potential impacts
-  + CSV
-  + JSON
+  - CSV
+  - JSON
 
 * Rose Plots
  - List of orbital elements for Risk page asteroids ([DES](http://ifa.hawaii.edu/users/jedicke/MOPS/docs/PSDC-530-004-02.DataExchangeStandard.pdf) format)
