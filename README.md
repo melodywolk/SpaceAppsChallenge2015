@@ -39,7 +39,11 @@ distance from Earth for each asteroid for the next 100 years.
 
 ## Credits
 
-* 3D Earth visualization
+* Google Chrome Experiments WebGL Globe
+
+* JPL Risk Page
+
+* IAU Minor Planet Center, orbital elements for JPL Risk Page objects
 
 * Institute for Astronomy Open House, April 12, 2015
  - Phyllis Podolske
