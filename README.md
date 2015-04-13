@@ -11,12 +11,12 @@ the long-term threat over the next 100 years.
 
 ## Description
 
-JPL maintains a current list of the most hazardous asteroids at its
-[Risk Page]:(http://neo.jpl.nasa.gov/risks/).  Instead of the
-standard approach of visualizing the orbits of these asteroids using
-a program such as [Celestia](ps1neos.png) we wanted to produce a
-visualization of the immediate threat from all Risk Page asteroids
-and show a snapshot of the 100-year risk outlook.
+JPL maintains a current list of the most hazardous near-Earth
+asteroids NEAs at its [Risk Page]:(http://neo.jpl.nasa.gov/risks/).
+Instead of the standard approach of visualizing the orbits of these
+asteroids using a program such as [Celestia](ps1neos.png) we wanted
+to produce a visualization of the immediate threat from all Risk
+Page asteroids and show a snapshot of the 100-year risk outlook.
 
 Our visualizations are the Impact Globe and the 100-Year Rose Plot.
 The Impact Globe summarizes total impact threat over a window of
@@ -34,8 +34,20 @@ potential impacts.  For all the Risk Page objects, we obtained
 orbital elements from the <a href="http://www.minorplanetcenter.net">IAU
 Minor Planet Center</a> and computed positions for all the asteroids
 every day for 100 years into the future.  The Rose Plot shows the
-distance from Earth for each asteroid for the next 100 years.
+distance from Earth for each asteroid over the next 100 years.
 
+## The Data
+
+* Impact Globe
+
+ - Complete list of Risk Page potential impacts
+  + CSV
+  + JSON
+
+* Rose Plots
+ - List of orbital elements for Risk page asteroids ([DES](http://ifa.hawaii.edu/users/jedicke/MOPS/docs/PSDC-530-004-02.DataExchangeStandard.pdf) format)
+ - [OpenOrb](https://code.google.com/p/oorb/) orbit and ephemeris tool.  Extract the MJD/UTC1 and Delta columns from the output.
+  
 
 ## Credits
 
