@@ -28,8 +28,8 @@ risk page for all objects. Each "needle" on the Impact Globe
 corresponds to a single asteroid's potential impact within a time
 window.  A needle is given a color code according to the energy of
 the potential impact (red is catastrophic, blue only a "light
-scare"), and the length of the need indicates the likelihood of an
-impact.
+scare"), and the length of the needle indicates the likelihood of an
+impact.  The locations of the needles are not meaningful -- they are distributed from all directions regardless of true direction of impact. 
 
 The Rose Plot shows the distance of a hazardous asteroid from Earth
 over the next 100 years, showing the periodic close approaches and
