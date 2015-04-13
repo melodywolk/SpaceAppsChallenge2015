@@ -34,7 +34,11 @@ potential impacts.  For all the Risk Page objects, we obtained
 orbital elements from the <a href="http://www.minorplanetcenter.net">IAU
 Minor Planet Center</a> and computed positions for all the asteroids
 every day for 100 years into the future.  The Rose Plot shows the
-distance from Earth for each asteroid over the next 100 years.
+distance from Earth for each asteroid over the next 100 years. The 
+dashed lines show the Earth-Moon distance and Geosync satellite
+altitude. Asteroids whose rose plot extends inside these dashed
+circles have approaches closer than the moon and geosynchronous
+satellite altitude, respectively.
 
 ## The Data
 
