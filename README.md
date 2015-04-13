@@ -1,13 +1,21 @@
 # SpaceAppsChallenge2015
 Visualization of the Asteroid Skies
 
+## Project
+
+H&#333;k&#363;lele Hula
+
+H&#333;k&#363;lele means "shooting star" in Hawaiian.  Our goal is
+to produce a visualization of the asteroid impact hazard, emphasizing
+the long-term threat over the next 100 years.
+
 ## Description
 
-JPL maintains a current list of the most hazardous asteroids at its [Risk
-Page]:(http://neo.jpl.nasa.gov/risks/).  Instead of the standard
-approach of visualizing the orbits of these asteroids using a program
-such as [Celestia](ps1neos.png) we wanted to produce
-a visualization of the immediate threat from all Risk Page asteroids
+JPL maintains a current list of the most hazardous asteroids at its
+[Risk Page]:(http://neo.jpl.nasa.gov/risks/).  Instead of the
+standard approach of visualizing the orbits of these asteroids using
+a program such as [Celestia](ps1neos.png) we wanted to produce a
+visualization of the immediate threat from all Risk Page asteroids
 and show a snapshot of the 100-year risk outlook.
 
 Our visualizations are the Impact Globe and the 100-Year Rose Plot.
