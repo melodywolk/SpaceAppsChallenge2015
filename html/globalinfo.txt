@@ -1,0 +1,43 @@
+For the fisrt year the Institute for Astronomy was part of the NASA Space Apps Challenge!
+NASA Space Apps Challenge is an international 48-hours hackathon focused on space exploration. It takes place in 140 cities around the world. The event embraces collaborative problem solving with a goal of producing relevant open-source solutions to address global needs applicable to both life on Earth and life in space.
+NASA is leading this global collaboration along with a number of government collaborators and over 100 local organizing teams across the globe. However Hawaii was not part of that exciting project so the Institute for Astronomy decided to build its own team and to meet the challenge.
+
+Challenge summary:
+Create data aggregators and visualizations of asteroid data in meaningful ways that can educate the public about the need to explore asteroids and protect the Earth from them. Extract data from existing asteroid databases and create clear, beautiful visualizations with them to show the power of asteroid exploration. Develop code that establishes connections to asteroid data sources, create data visualizers that translate retrieved asteroid data into meaningful plots or presentations; and integrate the communications and data visualization code into an interactive educational website.
+
+Team description:
+Our team gathered a lot of volunteers from the Institute for Astronomy with different field of expertise:
+- Serge Chastel: Pan-STARRS1 IPP-PSPS Software Engineer
+- Larry Denneau: ATLAS Senior Software Engineer
+- Curt Doods: Information Technology Manager
+- Andrei Sherstyuk: ATLAS Software Engineer
+- Istvan Szapudi: Astronomer
+- Melody Wolk: Cosmology Postdoctoral Fellowship
+- Po-Feng Wu: Galaxy formation Graduate Student
+
+
+Project description: Hokulele Hula: A Story of Asteroid
+Short overview: Like the Hula, a traditional hawaiian dance narrating the interaction between the native Hawaiians and the Sea, our project aims at providing new ways to tell the story between Asteroids ("Hokulele" or shooting stars) and the Earth.  
+
+Description:
+
+Like the waves that come and go around an island, our planet Earth is surrounded by an ocean of asteroids moving around us. And like the sea, the asteroids can be both a threat or an opportunity for the planet and the humankind. 
+For this project we aimed at developing original visualization tools that differ from the widely used and already well-known representation of the asteroid orbiting in our Solar system.
+We thus built simple, clear and graphic representations of the relevant information on the potentially hazardous asteroids (PHAs) over the next hundred years to raise awareness of the importance of studying and monitoring them.
+
+Another originality of our project is that the Space Apps Challenge overlapped with our annual Open House so we were able to demonstrate and explain our work to the general public and gather their inputs.
+We list our contributors who provided very good advice. We thanks them for that!
+Acknowledgments from the Institute for Astronomy Open House, April 12, 2015: 
+- Phyllis Podolske
+- Allan Stone
+- Sierra Beaton
+- The Baldus & Lawrence Ohana
+- Connor and Debbie Frey
+
+3D visualization of the Impact Globe 
+This project provides a 3D visualization of the probability of impact of asteroids over a window a 100 years. For different years, it shows the probability of impact of all the PHAs around the Earth. The position on the sky are random. However the length of the different lines encodes the probability of impact: the closer it gets to the Earth the more probable it will hit it. The line colors encode the energy of the impact: the redder the more dangerous.
+
+
+100-Year Rose Plot 
+This project is representing the evolution of the top 12 PHAs distance from Earth over the coming century. The visualizations are designed as a clock so people can see how close the different objects will get from Earth and select different individual asteroids. The dashed lines show the Earth-Moon distance and Geosync satellite altitude. 
+
