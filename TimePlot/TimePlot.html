@@ -68,6 +68,15 @@
 				//drawTimePlot(context);
 			};
 
+			function drawNEOData(neo) {
+				context.font = 'italic 10pt Calibri';
+				context.fillStyle = 'white';
+				var str = 'Name: '+neo.name;
+				var x = 10;
+				var y = 10;
+				context.fillText(str, x, y);
+			}
+
 			function drawNEO(name, from, to, danger) {
 				var theta = from[0] - dateMin;
 				theta /= dateN;
@@ -110,6 +119,7 @@
 				for(var i=0; i < neo.length; i++) {
 					for(var j=0; j < neo[i].data.length-1; j++) {
 						drawNEO(neo[i].name, neo[i].data[j], neo[i].data[j+1], neo[i].palermo);
+						drawNEOData(neo[i]);
 					}
 				}
 			}
@@ -217,6 +227,13 @@
 				context.strokeStyle = '#c7c7c7';
 				context.stroke();
 				context.restore();
+
+				// now show the sat
+				var satImage = new Image();
+				satImage.onload = function() {
+					context.drawImage(satImage, x - radius - satImage.width/2, (canvas.height-satImage.height)/2);
+				};
+				satImage.src = 'satellite.jpg';
 			}
 		
 			function colorScale(value) {
@@ -402,7 +419,6 @@
 		   //bgImage.src = 'http://apod.nasa.gov/apod/image/1210/m8m20_panstarrs900.jpg';
 		   bgImage.src = 'earth.png';
 		
-		      
 			/*
 		   // add click listener to canvas
 			document.getElementById('myCanvas').addEventListener('click', function() {
