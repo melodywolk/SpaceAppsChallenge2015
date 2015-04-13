@@ -16,7 +16,7 @@ Like the Hula, a traditional Hawaiian dance narrating the interaction between th
 
 JPL maintains a current list of the most hazardous near-Earth
 asteroids NEAs at its [Risk Page]:(http://neo.jpl.nasa.gov/risks/).
-Instead of the standard approach of visualizing the orbits of these
+Instead of the standard approach of [visualizing the orbits](http://upload.wikimedia.org/wikipedia/commons/f/f6/Potentially_Hazardous_Asteroids_2013.png) of these
 asteroids using a program such as [Celestia](ps1neos.png) we wanted
 to produce a visualization of the immediate threat from all Risk
 Page asteroids and show a snapshot of the 100-year risk outlook.
