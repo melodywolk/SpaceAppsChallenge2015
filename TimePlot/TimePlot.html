@@ -65,17 +65,61 @@
 				dateN = dateMax - dateMin + 1;
 				dTheta = 2*Math.PI / (dateN/dDate);
 				runAnimation.loading = false;
+				//drawTimePlot(context);
 			};
-		
+
+			function drawNEO(name, from, to, danger) {
+				var theta = from[0] - dateMin;
+				theta /= dateN;
+				theta *= 2.0*Math.PI;
+				var dist = AUToLogKM(from[1]);
+				x1 = dist * scaleDist;
+				x1 = x1 * Math.cos(theta);
+				x1 = x1 + canvas.width/2;
+				y1 = dist * scaleDist;
+				y1 = y1 * Math.sin(theta);
+				y1 = y1 + canvas.height/2;
+
+				theta = to[0] - dateMin;
+				theta /= dateN;
+				theta *= 2.0*Math.PI;
+				dist = AUToLogKM(to[1]);
+				x2 = dist * scaleDist;
+				x2 = x2 * Math.cos(theta);
+				x2 = x2 + canvas.width/2;
+				y2 = dist * scaleDist;
+				y2 = y2 * Math.sin(theta);
+				y2 = y2 + canvas.height/2;
+				if(x1 >= 0 && x1 < canvas.width && y1 >= 0 && y1 < canvas.height) {
+					if(x2 >= 0 && x2 < canvas.width && y2 >= 0 && y2 < canvas.height) {
+						context.beginPath();
+						context.moveTo(x1,y1);
+						context.lineTo(x2, y2);
+						context.lineWidth = 2; //obj.H * scaleH;
+						// set line color based on danger
+						context.strokeStyle = colorScale(danger);
+						context.stroke();
+					}
+				}
+			}
+
+			function drawTimePlot(context) {
+				// iterate over neo array
+				// iterate over data array (except last one)
+				// draw from this element to next element calculating theta and distance
+				for(var i=0; i < neo.length; i++) {
+					for(var j=0; j < neo[i].data.length-1; j++) {
+						drawNEO(neo[i].name, neo[i].data[j], neo[i].data[j+1], neo[i].palermo);
+					}
+				}
+			}
+
 			function initDistance() {
 				distMax = 12;
 				scaleDist = 290 / distMax;
 			}	  
 		</script>
 
-		<h3>
-		   <a href="https://github.com/melodywolk/SpaceAppsChallenge2015">IfA SpaceAppsChallenge2015</a>
-		</h3>
 		<canvas id="myCanvas" width="600" height="600"></canvas>
 
 		<script>
@@ -151,6 +195,7 @@
 				var moonImage = new Image();
 				moonImage.onload = function() {
 					context.drawImage(moonImage, x + radius - moonImage.width/2, (canvas.height-moonImage.height)/2);
+					drawTimePlot();
 				};
 				moonImage.src = 'moon.jpg';
 			}
@@ -204,7 +249,14 @@
 				return "rgba("+r+","+g+","+b+","+a+")";
 				*/
 			}
-		
+
+			function AUToLogKM(au) {
+				// convert AU to log10(km)
+				// using 149597871 km / AU
+				au *= 149597871.0;
+				return Math.log10(au);
+			}
+
 			function drawObject(obj, context) {
 				// compute x,y as function of time and dist from center
 
@@ -213,11 +265,7 @@
 				var dist = -1;
 				var dataIdx = xyPos[neoIdx].dataIdx;
 				if(neo[neoIdx].data[dataIdx][0] == dateMin+dateIdx) {
-					dist = neo[neoIdx].data[dataIdx][1];
-					// convert AU to log10(km)
-					// using 149597871 km / AU
-					dist *= 149597871.0;
-					dist = Math.log10(dist);
+					dist = AUToLogKM(neo[neoIdx].data[dataIdx][1]);
 					xyPos[neoIdx].dataIdx++;
 				}
 				if(dist >= 0) {
@@ -236,10 +284,10 @@
 					var str = mjds.toString();
 					context.fillText(str, 100, canvas.height-20);
 
-					/*
-					// draw the arrow of time
 					var x = canvas.width/2;
 					var y = canvas.height/2;
+					/*
+					// draw the arrow of time
 					var radius = 220;
 					context.beginPath();
 					context.arc(x, y, radius, lastTheta, theta);
@@ -348,13 +396,14 @@
 		
 			bgImage.onload = function() {
 				context.drawImage(bgImage, (canvas.width-bgImage.width)/2, (canvas.height-bgImage.height)/2);
-				drawMoon(context);
 				drawGEO(context);
+				drawMoon(context);
 			};
 		   //bgImage.src = 'http://apod.nasa.gov/apod/image/1210/m8m20_panstarrs900.jpg';
 		   bgImage.src = 'earth.png';
 		
 		      
+			/*
 		   // add click listener to canvas
 			document.getElementById('myCanvas').addEventListener('click', function() {
 				// flip flag
@@ -364,8 +413,8 @@
 					// clear the canvas
 					context.clearRect(0, 0, canvas.width, canvas.height);
 					context.drawImage(bgImage, (canvas.width-bgImage.width)/2, (canvas.height-bgImage.height)/2);
-					drawMoon(context);
 					drawGEO(context);
+					drawMoon(context);
 					// reset the animation
 					neoIdx = 0;
 					dateIdx = 0;
@@ -373,6 +422,7 @@
 					animate(neo, runAnimation, canvas, context);
 				}
 			});
+			*/
 		</script>
    </body>
 </html>      
