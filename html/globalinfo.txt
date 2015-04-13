@@ -39,5 +39,5 @@ This project provides a 3D visualization of the probability of impact of asteroi
 
 
 100-Year Rose Plot 
-This project is showing movies representing the evolution of the PHAs distance from Earth over the coming century. The movies are designed as a clock so people can follow how close the different objects will get from Earth and select different level of potential hazard (encoded by the color). The dashed lines show the Earth-Moon distance and Geosync satellite altitude. 
+This project is representing the evolution of the top 12 PHAs distance from Earth over the coming century. The visualizations are designed as a clock so people can see how close the different objects will get from Earth and select different individual asteroids. The dashed lines show the Earth-Moon distance and Geosync satellite altitude. 
 
