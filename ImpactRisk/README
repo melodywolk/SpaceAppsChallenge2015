@@ -1,0 +1,16 @@
+# PFW 2015.04.12
+
+The data used for this part come from NASA Near Earth Object Program (http://neo.jpl.nasa.gov/index.html). The table in the 'IMPACT RISK' page (http://neo.jpl.nasa.gov/risks/) lists potential future Earth impact events based on currently available observations. 
+
+Data acquisition:
+
+./get_riskObj.sh OUTNAME 
+
+This program creates the table for visualization. 
+This program save all possible impacts on http://neo.jpl.nasa.gov/risks/ and save to designate file 'OUTNAME' as a csv file. 
+This program calls perl script 'scrape.pl' 
+
+./scrape.pl OBJ
+
+This program retrieves possible impacts from object of interest ('OBJ') from http://neo.jpl.nasa.gov/risks/OBJ.html
+
